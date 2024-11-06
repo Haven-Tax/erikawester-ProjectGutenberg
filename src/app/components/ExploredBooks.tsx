@@ -1,5 +1,8 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { getExploredBooks } from "../services/bookService";
+import { getExploredBooks, fetchBookContents } from "../services/bookService";
+import { parseAllMetadata } from "../utils/metadataParser";
 
 interface Book {
   book_id: number;
@@ -8,7 +11,23 @@ interface Book {
   accessed_at: string;
 }
 
-export default function ExploredBooks() {
+interface BookMetadata {
+  title: string;
+  author: string;
+  // Add other metadata fields as needed
+}
+
+interface ExploredBooksProps {
+  setContent: (content: string) => void;
+  setMetadata: (metadata: string) => void;
+  setParsedMetadata: (metadata: BookMetadata) => void;
+}
+
+export default function ExploredBooks({
+  setContent,
+  setMetadata,
+  setParsedMetadata,
+}: ExploredBooksProps) {
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -63,15 +82,19 @@ export default function ExploredBooks() {
               Added: {new Date(book.accessed_at).toLocaleDateString()}
             </p>
             <button
-              onClick={() => {
-                // Update the input field with this book's ID
-                const input = document.querySelector('input[type="text"]');
-                if (input) {
-                  (input as HTMLInputElement).value = book.book_id.toString();
-                  input.dispatchEvent(new Event("change", { bubbles: true }));
+              onClick={async () => {
+                try {
+                  const bookData = await fetchBookContents(book.book_id);
+                  if (bookData) {
+                    setContent(bookData.full_text);
+                    setMetadata(bookData.metadata);
+                  }
+                  const parsedMetadata = parseAllMetadata(bookData.metadata);
+                  setParsedMetadata(parsedMetadata);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } catch (error) {
+                  console.error("Error loading book:", error);
                 }
-                // Scroll to the top of the page
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors w-full"
             >
