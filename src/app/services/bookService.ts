@@ -56,39 +56,16 @@ export async function getExploredBooks() {
   return data;
 }
 
-// remove this after testing complete
-export async function testDatabaseConnection() {
-  // Insert a test entry
-  const { data: insertData, error: insertError } = await supabase
+export async function fetchBookContents(bookId: number) {
+  const { data, error } = await supabase
     .from("books_history")
-    .insert([
-      {
-        book_id: 99999,
-        title: "Test Title",
-        author: "Test Author",
-        accessed_at: new Date(),
-      },
-    ]);
+    .select("full_text, title, author, metadata")
+    .eq("book_id", bookId)
+    .single();
 
-  if (insertError) {
-    console.error("Error inserting test data:", insertError);
-    return { success: false, message: insertError.message };
-  } else {
-    console.log("Test data inserted:", insertData);
+  if (error) {
+    console.error("Error fetching book contents:", error);
+    throw error;
   }
-
-  // Retrieve the test entry
-  const { data: fetchData, error: fetchError } = await supabase
-    .from("books_history")
-    .select("*")
-    .eq("book_id", 99999);
-
-  if (fetchError) {
-    console.error("Error fetching test data:", fetchError);
-    return { success: false, message: fetchError.message };
-  } else {
-    console.log("Test data fetched:", fetchData);
-  }
-
-  return { success: true, data: fetchData };
+  return data;
 }
