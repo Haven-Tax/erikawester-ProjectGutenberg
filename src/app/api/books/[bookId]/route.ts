@@ -59,33 +59,46 @@ export async function POST(req: Request) {
   ];
 
   const summaries = [];
-  for (let i = 0; i < chunks.length; i++) {
-    try {
-      const response = await axios.post(
-        "https://api.sambanova.ai/v1/chat/completions",
-        {
-          stream: false,
-          model: SAMBANOVA_MODEL_ID,
-          messages: [
-            { role: "system", content: "You are a helpful assistant." },
-            { role: "user", content: `Summarize this text: ${chunks[i]}` },
-          ],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${SAMBANOVA_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  try {
+    const response = await axios.post(
+      "https://api.sambanova.ai/v1/chat/completions",
+      {
+        stream: false,
+        model: SAMBANOVA_MODEL_ID,
+        messages: [
+          { role: "system", content: "You are a helpful assistant." },
+          {
+            role: "user",
+            content: `Based on these three sequential parts of the book:
+  
+  Part 1: ${chunks[0]}
+  
+  Part 2: ${chunks[1]}
+  
+  Part 3: ${chunks[2]}
 
-      const chunkSummary =
-        response.data.choices[0]?.message?.content || "Summary unavailable";
-      summaries.push(chunkSummary);
-    } catch (error) {
-      console.error("Error with SambaNova API:", error);
-      summaries.push("Error generating summary for this chunk.");
-    }
+  Please provide ONE response with:
+  1. A single comprehensive summary of the entire story (combining all parts)
+  2. A list of ONLY the top 5 main characters with brief descriptions
+  
+  Do not summarize each part separately. Provide just one unified summary.`,
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${SAMBANOVA_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const chunkSummary =
+      response.data.choices[0]?.message?.content || "Summary unavailable";
+    summaries.push(chunkSummary);
+  } catch (error) {
+    console.error("Error with SambaNova API:", error);
+    summaries.push("Error generating summary for this chunk.");
   }
 
   const fullSummary = summaries.join(" ");
