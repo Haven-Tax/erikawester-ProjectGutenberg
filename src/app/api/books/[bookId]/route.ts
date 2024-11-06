@@ -105,6 +105,7 @@
 
 import { NextResponse } from "next/server";
 import axios from "axios";
+import { storeBookMetadata } from "@/app/services/bookService";
 
 const SAMBANOVA_API_KEY = process.env.SAMBANOVA_API_KEY;
 const SAMBANOVA_MODEL_ID = "Meta-Llama-3.1-8B-Instruct";
@@ -196,3 +197,4 @@ export async function POST(req: Request) {
   const fullSummary = summaries.join(" ");
   return NextResponse.json({ fullSummary });
 }
+
