@@ -47,7 +47,7 @@ export async function getExploredBooks() {
   const { data, error } = await supabase
     .from("books_history")
     .select("book_id, title, author, accessed_at")
-    .order("accessed_at", { ascending: false }) // Most recent first
+    .order("accessed_at", { ascending: false }); // Most recent first
 
   if (error) {
     console.error("Error fetching explored books:", error);

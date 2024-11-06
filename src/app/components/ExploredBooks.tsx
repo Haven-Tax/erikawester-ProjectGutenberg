@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { getExploredBooks, fetchBookContents } from "../services/bookService";
 import { parseAllMetadata } from "../utils/metadataParser";
+import { styles } from "../styles/styles";
 
 interface Book {
   book_id: number;
@@ -14,6 +15,7 @@ interface Book {
 interface ExploredBooksProps {
   setContent: (content: string) => void;
   setMetadata: (metadata: string) => void;
+  setBookId: (bookId: string) => void;
   setParsedMetadata: React.Dispatch<
     React.SetStateAction<{
       title: string;
@@ -30,8 +32,10 @@ export default function ExploredBooks({
   setMetadata,
   setParsedMetadata,
 }: ExploredBooksProps) {
+  const { layout, text, button } = styles;
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [bookId, setBookId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchBooks() {
@@ -51,37 +55,38 @@ export default function ExploredBooks({
 
   if (isLoading)
     return (
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">Loading available books...</h2>
+      <div className={layout.section}>
+        <h2 className={text.h2}>Loading available books...</h2>
       </div>
     );
 
   if (books.length === 0)
     return (
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">
+      <div className={layout.section}>
+        <h2 className={text.h2}>
           No books have been explored yet. Be the first to add one!
         </h2>
       </div>
     );
 
   return (
-    <div className="mt-8">
-      <h2 className="text-2xl font-bold mb-4">
-        Available Books to Explore ({books.length} books)
+    <div className={layout.section}>
+      <h2 className={text.h2}>
+        Previously Explored Books ({books.length} books)
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <h3 className={text.h3}>
+        Check out books that have been previously explored on our site!
+      </h3>
+      <div className={layout.grid}>
         {books.map((book) => (
           <div
             key={`${book.book_id}-${book.accessed_at}`}
-            className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+            className={layout.card}
           >
-            <h3 className="font-semibold text-lg">{book.title}</h3>
-            <p className="text-gray-600">{book.author}</p>
-            <p className="text-sm text-gray-500 mt-2">
-              Book ID: {book.book_id}
-            </p>
-            <p className="text-sm text-gray-500">
+            <h3 className={text.h3}>{book.title}</h3>
+            <p className={text.body}>{book.author}</p>
+            <p className={text.meta}>Book ID: {book.book_id}</p>
+            <p className={text.meta}>
               Added: {new Date(book.accessed_at).toLocaleDateString()}
             </p>
             <button
@@ -91,6 +96,7 @@ export default function ExploredBooks({
                   if (bookData) {
                     setContent(bookData.full_text);
                     setMetadata(bookData.metadata);
+                    setBookId(book.book_id.toString());
                   }
                   const parsedMetadata = parseAllMetadata(bookData.metadata);
                   setParsedMetadata(parsedMetadata);
@@ -99,7 +105,7 @@ export default function ExploredBooks({
                   console.error("Error loading book:", error);
                 }
               }}
-              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors w-full"
+              className={button.primary}
             >
               Load This Book
             </button>
