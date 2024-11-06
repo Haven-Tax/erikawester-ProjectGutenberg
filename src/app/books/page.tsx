@@ -4,7 +4,7 @@ import React from "react";
 import { useState } from "react";
 import ExploredBooks from "../components/ExploredBooks";
 import { parseAllMetadata } from "../utils/metadataParser";
-
+import { storeBookData } from "../services/bookService";
 interface BookMetadata {
   title: string;
   author: string;
@@ -18,6 +18,7 @@ export default function BooksPage() {
   const [content, setContent] = useState("");
   const [metadata, setMetadata] = useState("");
   const [summary, setSummary] = useState("");
+
   const [parsedMetadata, setParsedMetadata] = useState<BookMetadata>({
     title: "",
     author: "",
@@ -33,11 +34,16 @@ export default function BooksPage() {
       setContent(result.content);
       setMetadata(result.metadata);
 
-      // Parse the metadata HTML to extract specific fields
       const parsedData = parseAllMetadata(result.metadata);
       setParsedMetadata(parsedData);
 
-      // Store book data logic here...
+      await storeBookData(
+        parseInt(bookId),
+        parsedData.title,
+        parsedData.author,
+        result.content,
+        result.metadata
+      );
     } catch (error) {
       console.error("Error fetching book:", error);
     }

@@ -11,16 +11,18 @@ interface Book {
   accessed_at: string;
 }
 
-interface BookMetadata {
-  title: string;
-  author: string;
-  // Add other metadata fields as needed
-}
-
 interface ExploredBooksProps {
   setContent: (content: string) => void;
   setMetadata: (metadata: string) => void;
-  setParsedMetadata: React.Dispatch<React.SetStateAction<BookMetadata>>;
+  setParsedMetadata: React.Dispatch<
+    React.SetStateAction<{
+      title: string;
+      author: string;
+      language: string;
+      notes: string;
+      credits: string;
+    }>
+  >;
 }
 
 export default function ExploredBooks({
@@ -33,6 +35,7 @@ export default function ExploredBooks({
 
   useEffect(() => {
     async function fetchBooks() {
+      setIsLoading(true);
       try {
         const exploredBooks = await getExploredBooks();
         setBooks(exploredBooks);
