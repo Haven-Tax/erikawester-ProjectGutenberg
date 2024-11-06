@@ -1,111 +1,5 @@
-// import { NextResponse, NextRequest } from "next/server";
-// import axios from "axios";
-
-// const SAMBANOVA_API_KEY = process.env.SAMBANOVA_API_KEY;
-// const SAMBANOVA_MODEL_ID = "Meta-Llama-3.1-8B-Instruct";
-
-// export async function GET(
-//   req: Request,
-//   context: { params: { bookId: string } }
-// ) {
-//   const { bookId } = context.params;
-//   console.log("bookId", bookId);
-
-//   const contentUrl = `https://www.gutenberg.org/files/${bookId}/${bookId}-0.txt`;
-//   const metadataUrl = `https://www.gutenberg.org/ebooks/${bookId}`;
-
-//   try {
-//     // Fetch the book content
-//     const contentResponse = await fetch(contentUrl);
-//     if (!contentResponse.ok) {
-//       return NextResponse.json(
-//         { error: "Failed to fetch book content" },
-//         { status: 500 }
-//       );
-//     }
-//     const content = await contentResponse.text();
-//     // console.log(content);
-//     const words = content.split(" ").slice(0, 10000);
-//     const chunks = [
-//       words.slice(0, 4000).join(" "),
-//       words.slice(4000, 8000).join(" "),
-//       words.slice(8000, 10000).join(" "),
-//     ];
-
-//     let summaries = []; 
-//     for (let i = 0; i < chunks.length; i++) {
-//     // let summary = "Summary unavailable";
-//     if (SAMBANOVA_API_KEY) {
-//       // console.log("does API key log??", SAMBANOVA_API_KEY);
-//       try {
-//         // Split content into words and take the first 10,000 words
-//         // Send the content to SambaNova for summarization
-//         const summaryResponse = await axios.post(
-//           "https://api.sambanova.ai/v1/chat/completions",
-//           {
-//             stream: false,
-//             model: SAMBANOVA_MODEL_ID,
-//             messages: [
-//               { role: "system", content: "You are a helpful assistant." },
-//               {
-//                 role: "user",
-//                 content: `summarize this text: ${chunks[i]}`,
-//               },
-//             ],
-//           },
-//           {
-//             headers: {
-//               Authorization: `Bearer ${SAMBANOVA_API_KEY}`,
-//               "Content-Type": "application/json",
-//             },
-//           }
-//         );
-
-//         const chunkSummary = response.data.choices[0]?.message?.content || 'Summary unavailable';
-//         summaries.push(chunkSummary);
-
-//       } catch (error) {
-
-//         console.error("Error with SambaNova API: ", i + 1);
-//         summaries.push('Error generating summary for this chunk')
-//       }
-//     }
-//   }
-
-
-//     // Return the content and the summary in the response
-
-//     // Fetch the metadata
-//     const metadataResponse = await fetch(metadataUrl);
-//     if (!metadataResponse.ok) {
-//       return NextResponse.json(
-//         { error: "Failed to fetch metadata" },
-//         { status: 500 }
-//       );
-//     }
-//     let metadata = await metadataResponse.text();
-
-//     // console.log("METADATA", metadata);
-
-//     // Replace asset URLs to route through your proxy
-//     metadata = metadata.replace(
-//       /https:\/\/www\.gutenberg\.org\/(gutenberg|cache\/epub|pics)\/([^\s"'>]+)/g,
-//       "/api/proxy?url=https://www.gutenberg.org/$1/$2"
-//     );
-
-//     // Return JSON response with both content and metadata
-//     return NextResponse.json({ content, metadata, fullSummary });
-//   } catch (error) {
-//     console.error("Error fetching book data:", error);
-//     return NextResponse.json({ error: "An error occurred" }, { status: 500 });
-//   }
-// }
-
-// src/api/books/[bookId]/route.ts
-
 import { NextResponse } from "next/server";
 import axios from "axios";
-import { storeBookMetadata } from "@/app/services/bookService";
 
 const SAMBANOVA_API_KEY = process.env.SAMBANOVA_API_KEY;
 const SAMBANOVA_MODEL_ID = "Meta-Llama-3.1-8B-Instruct";
@@ -164,7 +58,7 @@ export async function POST(req: Request) {
     words.slice(8000, 10000).join(" "),
   ];
 
-  let summaries = [];
+  const summaries = [];
   for (let i = 0; i < chunks.length; i++) {
     try {
       const response = await axios.post(
@@ -197,4 +91,3 @@ export async function POST(req: Request) {
   const fullSummary = summaries.join(" ");
   return NextResponse.json({ fullSummary });
 }
-

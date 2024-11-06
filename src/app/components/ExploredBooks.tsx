@@ -20,7 +20,7 @@ interface BookMetadata {
 interface ExploredBooksProps {
   setContent: (content: string) => void;
   setMetadata: (metadata: string) => void;
-  setParsedMetadata: (metadata: BookMetadata) => void;
+  setParsedMetadata: React.Dispatch<React.SetStateAction<BookMetadata>>;
 }
 
 export default function ExploredBooks({
