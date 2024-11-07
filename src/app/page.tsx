@@ -55,7 +55,7 @@ export default function BooksPage() {
       }
 
       const parsedData = parseAllMetadata(result.metadata);
-      
+
       await storeBookData(
         parseInt(bookId),
         parsedData.title,
@@ -67,8 +67,8 @@ export default function BooksPage() {
       setContent(result.content);
       setMetadata(result.metadata);
       setParsedMetadata(parsedData);
-      setShouldRefreshBooks(prev => !prev);
-
+      setShouldRefreshBooks((prev) => !prev);
+      setBookId("");
     } catch (error) {
       console.error("Error fetching book:", error);
     } finally {
@@ -112,12 +112,12 @@ export default function BooksPage() {
               className={input.field}
               disabled={isFetching}
             />
-            <button 
-              onClick={fetchBook} 
+            <button
+              onClick={fetchBook}
               className={button.primary}
               disabled={isFetching}
             >
-              {isFetching ? 'Fetching...' : 'Fetch Book'}
+              {isFetching ? "Fetching..." : "Fetch Book"}
             </button>
           </div>
           {error && <p className="text-red-500 mt-2">{error}</p>}
@@ -139,6 +139,8 @@ export default function BooksPage() {
       {/* Previously Explored Books */}
       <div className={layout.wrapper}>
         <ExploredBooks
+          setSummary={setSummary}
+          setAnalysisComplete={setAnalysisComplete}
           refreshTrigger={shouldRefreshBooks}
           setContent={setContent}
           setMetadata={setMetadata}

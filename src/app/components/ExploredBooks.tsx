@@ -16,6 +16,8 @@ interface ExploredBooksProps {
   refreshTrigger: boolean;
   setContent: (content: string) => void;
   setMetadata: (metadata: string) => void;
+  setSummary: (summary: string) => void;
+  setAnalysisComplete: (analysisComplete: boolean) => void;
   setParsedMetadata: React.Dispatch<
     React.SetStateAction<{
       title: string;
@@ -32,6 +34,8 @@ export default function ExploredBooks({
   setContent,
   setMetadata,
   setParsedMetadata,
+  setSummary,
+  setAnalysisComplete,
 }: ExploredBooksProps) {
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -91,6 +95,8 @@ export default function ExploredBooks({
               <button
                 onClick={async () => {
                   try {
+                    setSummary("");
+                    setAnalysisComplete(false);
                     const bookData = await fetchBookContents(book.book_id);
                     if (bookData) {
                       setContent(bookData.full_text);
