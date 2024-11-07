@@ -15,7 +15,6 @@ interface Book {
 interface ExploredBooksProps {
   setContent: (content: string) => void;
   setMetadata: (metadata: string) => void;
-  setBookId: (bookId: string) => void;
   setParsedMetadata: React.Dispatch<
     React.SetStateAction<{
       title: string;
@@ -32,10 +31,8 @@ export default function ExploredBooks({
   setMetadata,
   setParsedMetadata,
 }: ExploredBooksProps) {
-  const { layout, text, button } = styles;
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [bookId, setBookId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchBooks() {
@@ -55,26 +52,26 @@ export default function ExploredBooks({
 
   if (isLoading)
     return (
-      <div className={layout.section}>
-        <h2 className={text.h2}>Loading available books...</h2>
+      <div className={styles.layout.section}>
+        <h2 className={styles.text.h2}>Loading available books...</h2>
       </div>
     );
 
   if (books.length === 0)
     return (
-      <div className={layout.section}>
-        <h2 className={text.h2}>
+      <div className={styles.layout.section}>
+        <h2 className={styles.text.h2}>
           No books have been explored yet. Be the first to add one!
         </h2>
       </div>
     );
 
   return (
-    <div className={layout.section}>
-      <h2 className={text.h4}>
+    <div className={styles.layout.section}>
+      <h2 className={styles.text.h4}>
         Previously Explored Books ({books.length} books)
       </h2>
-      <h3 className={text.h3}>
+      <h3 className={styles.text.h3}>
         Check out books that users have previously explored on our site! The
         more books you search, the more books will be added here! Let's get
         reading... 👀
@@ -96,7 +93,6 @@ export default function ExploredBooks({
                     if (bookData) {
                       setContent(bookData.full_text);
                       setMetadata(bookData.metadata);
-                      setBookId(book.book_id.toString());
                     }
                     const parsedMetadata = parseAllMetadata(bookData.metadata);
                     setParsedMetadata(parsedMetadata);
