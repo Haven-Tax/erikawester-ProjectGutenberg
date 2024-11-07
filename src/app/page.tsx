@@ -19,7 +19,6 @@ export default function BooksPage() {
   const { layout, text, button, input } = styles;
   const [bookId, setBookId] = useState("");
   const [content, setContent] = useState("");
-  // const [metadata, setMetadata] = useState("");
   const [summary, setSummary] = useState("");
   const [error, setError] = useState("");
   const [parsedMetadata, setParsedMetadata] = useState<BookMetadata>({
@@ -38,6 +37,8 @@ export default function BooksPage() {
 
   const fetchBook = async () => {
     setError("");
+    setSummary("");
+    setAnalysisComplete(false);
     try {
       const response = await fetch(`/api/books/${bookId}`);
       const result = await response.json();
