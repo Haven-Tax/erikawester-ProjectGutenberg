@@ -3,7 +3,7 @@
   publish = ".next"
 
 [build.environment]
-  NETLIFY_SITE_ID = 38451108-a384-4531-9f6a-60b8f0d140fa
+  NETLIFY_SITE_ID = "38451108-a384-4531-9f6a-60b8f0d140fa"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
