@@ -30,6 +30,9 @@ export default function BooksPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [analysisComplete, setAnalysisComplete] = useState(false);
+  const [shouldRefreshBooks, setShouldRefreshBooks] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+
   const setMetadata = (metadata: string) => {
     const parsedData = parseAllMetadata(metadata);
     setParsedMetadata(parsedData);
@@ -39,6 +42,7 @@ export default function BooksPage() {
     setError("");
     setSummary("");
     setAnalysisComplete(false);
+    setIsFetching(true);
     try {
       const response = await fetch(`/api/books/${bookId}`);
       const result = await response.json();
@@ -50,12 +54,8 @@ export default function BooksPage() {
         return;
       }
 
-      setContent(result.content);
-      setMetadata(result.metadata);
-
       const parsedData = parseAllMetadata(result.metadata);
-      setParsedMetadata(parsedData);
-
+      
       await storeBookData(
         parseInt(bookId),
         parsedData.title,
@@ -63,8 +63,16 @@ export default function BooksPage() {
         result.content,
         result.metadata
       );
+
+      setContent(result.content);
+      setMetadata(result.metadata);
+      setParsedMetadata(parsedData);
+      setShouldRefreshBooks(prev => !prev);
+
     } catch (error) {
       console.error("Error fetching book:", error);
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -102,9 +110,14 @@ export default function BooksPage() {
               onChange={(e) => setBookId(e.target.value)}
               placeholder="Enter Book ID"
               className={input.field}
+              disabled={isFetching}
             />
-            <button onClick={fetchBook} className={button.primary}>
-              Fetch Book
+            <button 
+              onClick={fetchBook} 
+              className={button.primary}
+              disabled={isFetching}
+            >
+              {isFetching ? 'Fetching...' : 'Fetch Book'}
             </button>
           </div>
           {error && <p className="text-red-500 mt-2">{error}</p>}
@@ -126,6 +139,7 @@ export default function BooksPage() {
       {/* Previously Explored Books */}
       <div className={layout.wrapper}>
         <ExploredBooks
+          refreshTrigger={shouldRefreshBooks}
           setContent={setContent}
           setMetadata={setMetadata}
           setParsedMetadata={setParsedMetadata}

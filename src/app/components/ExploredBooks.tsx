@@ -13,6 +13,7 @@ interface Book {
 }
 
 interface ExploredBooksProps {
+  refreshTrigger: boolean;
   setContent: (content: string) => void;
   setMetadata: (metadata: string) => void;
   setParsedMetadata: React.Dispatch<
@@ -27,6 +28,7 @@ interface ExploredBooksProps {
 }
 
 export default function ExploredBooks({
+  refreshTrigger,
   setContent,
   setMetadata,
   setParsedMetadata,
@@ -48,7 +50,7 @@ export default function ExploredBooks({
     }
 
     fetchBooks();
-  }, []);
+  }, [refreshTrigger]);
 
   if (isLoading)
     return (
