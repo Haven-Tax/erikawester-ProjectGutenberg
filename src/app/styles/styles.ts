@@ -10,6 +10,7 @@ export const styles = {
     h1: "text-6xl font-['Inter'] text-[#2D2A27] mb-8 leading-tight tracking-tight font-bold",
     h2: "text-[2.5rem] font-serif text-[#2D2A27] mb-6 tracking-tight",
     h3: "text-xl font-semibold text-[#2D2A27] mb-4 tracking-wide",
+    h4: "text-4xl font-['Inter'] text-[#2D2A27] mb-8 leading-tight tracking-tight font-bold",
     body: "text-[#4A4A4A] text-lg leading-relaxed",
     meta: "text-sm text-[#6B6B6B] tracking-wide",
     pre: "whitespace-pre-wrap font-sans text-[#4A4A4A] leading-relaxed",
@@ -32,7 +33,8 @@ export const styles = {
       hover:bg-gray-700 transition-all duration-200
       transform hover:scale-105 shadow-sm hover:shadow-md
     `,
-    disabled: "bg-gray-300 text-gray-500 cursor-not-allowed px-6 py-3 rounded-lg",
+    disabled:
+      "bg-gray-300 text-gray-500 cursor-not-allowed px-6 py-3 rounded-lg",
   },
 
   input: {
@@ -65,7 +67,8 @@ export const styles = {
   },
 
   card: {
-    container: "flex flex-col h-full p-6 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow",
+    container:
+      "flex flex-col h-full p-6 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow",
     title: "text-2xl font-bold mb-2",
     author: "text-lg text-gray-600 mb-4",
     meta: "text-sm text-gray-500 mb-2",

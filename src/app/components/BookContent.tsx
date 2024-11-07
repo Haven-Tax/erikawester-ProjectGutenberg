@@ -33,34 +33,36 @@ export default function BookContent({
 
       <div className={layout.section}>
         <div className={layout.wrapper}>
-          <h2 className={text.h2}>Book Content</h2>
+          <h2 className={text.h2}>Book Content 📖</h2>
 
           <div className={contentStyle.scroll}>
             <pre className={text.pre}>{content}</pre>
           </div>
 
           <div className="mt-12 mb-4">
-            <h3 className={text.h3}>AI Text Analysis</h3>
+            <h2 className={text.h2}>AI Text Analysis 🤖</h2>
             <h4>
               Would you like to use AI to provide a Text Analysis of this book?
             </h4>
             <h5 className="text-gray-600 mb-2 text-sm">
-              For when you don't feel like reading the full book! 🤷‍♀
+              For when you don't feel like reading the full book 🤷‍♀
             </h5>
-            {isLoading ? (
-              <div className="inline-block px-4 py-2 bg-gray-100 text-gray-600 rounded-md animate-pulse">
-                Fetching analysis... please hold!
-              </div>
-            ) : (
-              <button onClick={onSummarize} className={button.secondary}>
-                Generate Analysis
-              </button>
-            )}
-            {analysisComplete && !isLoading && (
-              <div className="inline-block px-4 py-2 bg-green-100 text-green-600 rounded-md">
-                ✨ Summary and Main Characters Ready!
-              </div>
-            )}
+            <div className="mt-8">
+              {isLoading ? (
+                <div className="inline-block px-4 py-2 bg-gray-100 text-gray-600 rounded-md animate-pulse">
+                  Fetching analysis... please hold!
+                </div>
+              ) : (
+                <button onClick={onSummarize} className={button.secondary}>
+                  Generate Analysis
+                </button>
+              )}
+              {analysisComplete && !isLoading && (
+                <div className="inline-block px-4 py-2 bg-green-100 text-green-600 rounded-md">
+                  ✨ Summary and Main Characters Ready!
+                </div>
+              )}
+            </div>
           </div>
 
           {summary && (

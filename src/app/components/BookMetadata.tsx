@@ -16,7 +16,7 @@ export default function BookMetadata({ metadata }: BookMetadataProps) {
 
   return (
     <div className={layout.wrapper}>
-      <h2 className={text.h2}>Book Information</h2>
+      <h2 className={text.h2}>Book Information 📚</h2>
       <div className="space-y-1">
         {Object.entries(metadata).map(([key, value]) => (
           <div key={key} className="text-md text-[#4A4A4A]">

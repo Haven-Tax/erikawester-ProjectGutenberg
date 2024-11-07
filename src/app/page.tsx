@@ -105,6 +105,7 @@ export default function BooksPage() {
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
 
+        {/* Book Information and Content */}
         {content && (
           <BookContent
             content={content}
@@ -117,6 +118,7 @@ export default function BooksPage() {
         )}
       </div>
 
+      {/* Previously Explored Books */}
       <div className={layout.wrapper}>
         <ExploredBooks
           setContent={setContent}

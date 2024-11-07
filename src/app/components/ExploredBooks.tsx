@@ -71,7 +71,7 @@ export default function ExploredBooks({
 
   return (
     <div className={layout.section}>
-      <h2 className={text.h2}>
+      <h2 className={text.h4}>
         Previously Explored Books ({books.length} books)
       </h2>
       <h3 className={text.h3}>
