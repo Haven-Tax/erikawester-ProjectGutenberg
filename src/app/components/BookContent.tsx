@@ -45,22 +45,21 @@ export default function BookContent({
               Would you like to use AI to provide a Text Analysis of this book?
             </h4>
             <h5 className="text-gray-600 mb-2 text-sm">
-              Save some time before you dive in. We get it, sometimes we don't
-              feel like reading the full book either 🤷‍♀
+              For when you don't feel like reading the full book! 🤷‍♀
             </h5>
             {isLoading ? (
-              <p className="text-gray-600 mb-2 animate-pulse">
+              <div className="inline-block px-4 py-2 bg-gray-100 text-gray-600 rounded-md animate-pulse">
                 Fetching analysis... please hold!
-              </p>
+              </div>
             ) : (
               <button onClick={onSummarize} className={button.secondary}>
                 Generate Analysis
               </button>
             )}
             {analysisComplete && !isLoading && (
-              <p className="text-green-600 mt-4">
-                A Summary and the Main Characters have been determined!
-              </p>
+              <div className="inline-block px-4 py-2 bg-green-100 text-green-600 rounded-md">
+                ✨ Summary and Main Characters Ready!
+              </div>
             )}
           </div>
 

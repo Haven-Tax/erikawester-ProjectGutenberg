@@ -21,6 +21,7 @@ export default function BooksPage() {
   const [content, setContent] = useState("");
   const [metadata, setMetadata] = useState("");
   const [summary, setSummary] = useState("");
+  const [error, setError] = useState("");
   const [parsedMetadata, setParsedMetadata] = useState<BookMetadata>({
     title: "",
     author: "",
@@ -32,9 +33,18 @@ export default function BooksPage() {
   const [analysisComplete, setAnalysisComplete] = useState(false);
 
   const fetchBook = async () => {
+    setError("");
     try {
       const response = await fetch(`/api/books/${bookId}`);
       const result = await response.json();
+
+      if (!response.ok) {
+        setError(
+          "Project Gutenberg does not have a book with this ID, please try another number!"
+        );
+        return;
+      }
+
       setContent(result.content);
       setMetadata(result.metadata);
 
@@ -92,6 +102,7 @@ export default function BooksPage() {
               Fetch Book
             </button>
           </div>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
 
         {content && (
