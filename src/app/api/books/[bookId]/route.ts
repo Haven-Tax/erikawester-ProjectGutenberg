@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
 
 // GET: Fetches content and metadata from Project Gutenberg
-export async function GET(
-  req: Request,
-  context: { params: { bookId: string } }
-) {
-  const { bookId } = context.params;
+export async function GET(request: Request) {
+  const bookId = request.url.match(/\/books\/(\d+)/)?.[1] ?? "";
   const contentUrl = `https://www.gutenberg.org/files/${bookId}/${bookId}-0.txt`;
   const metadataUrl = `https://www.gutenberg.org/ebooks/${bookId}`;
 
@@ -15,7 +12,7 @@ export async function GET(
     if (!contentResponse.ok) {
       return NextResponse.json(
         { error: "Book not found in Gutenberg library" },
-        { status: 500 }
+        { status: 404 }
       );
     }
     const content = await contentResponse.text();

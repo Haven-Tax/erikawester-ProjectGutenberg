@@ -73,7 +73,7 @@ export default function ExploredBooks({
       </h2>
       <h3 className={styles.text.h3}>
         Check out books that users have previously explored on our site! The
-        more books you search, the more books will be added here! Let's get
+        more books you search, the more books will be added here! Let&apos;s get
         reading... 👀
       </h3>
       <div className={styles.layout.grid}>
