@@ -68,8 +68,8 @@ export default function BooksPage() {
         <h1 className={text.h1}>Project Gutenberg Books</h1>
 
         {/* Input and Buttons Section */}
-        <div className={layout.card}>
-          <div className={input.container}>
+        <div className={styles.layout.wrapper}>
+          <div className={styles.input.container}>
             <input
               type="text"
               value={bookId}
@@ -85,11 +85,11 @@ export default function BooksPage() {
 
         {/* Book Metadata Section */}
         {content && (
-          <div className={layout.section}>
+          <div className={styles.layout.section}>
             <BookMetadata metadata={parsedMetadata} />
 
             {/* Book Content Section */}
-            <div className={layout.card}>
+            <div className={layout.wrapper}>
               <h2 className={text.h2}>Book Content</h2>
               <div className="mb-4">
                 <p className="text-gray-600 mb-2">
@@ -106,7 +106,7 @@ export default function BooksPage() {
 
             {/* Summary Section */}
             {summary && (
-              <div className={layout.card}>
+              <div className={layout.wrapper}>
                 <h2 className={text.h2}>Summary</h2>
                 <div className={contentStyle.scroll}>
                   <pre className={text.pre}>{summary}</pre>

@@ -81,7 +81,7 @@ export default function ExploredBooks({
         {books.map((book) => (
           <div
             key={`${book.book_id}-${book.accessed_at}`}
-            className={layout.card}
+            className={layout.wrapper}
           >
             <h3 className={text.h3}>{book.title}</h3>
             <p className={text.body}>{book.author}</p>
