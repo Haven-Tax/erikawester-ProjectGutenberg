@@ -75,40 +75,37 @@ export default function ExploredBooks({
         Previously Explored Books ({books.length} books)
       </h2>
       <h3 className={text.h3}>
-        Check out books that have been previously explored on our site!
+        Check out books that users have previously explored on our site!
       </h3>
-      <div className={layout.grid}>
+      <div className={styles.layout.grid}>
         {books.map((book) => (
-          <div
-            key={`${book.book_id}-${book.accessed_at}`}
-            className={layout.wrapper}
-          >
-            <h3 className={text.h3}>{book.title}</h3>
-            <p className={text.body}>{book.author}</p>
-            <p className={text.meta}>Book ID: {book.book_id}</p>
-            <p className={text.meta}>
-              Added: {new Date(book.accessed_at).toLocaleDateString()}
-            </p>
-            <button
-              onClick={async () => {
-                try {
-                  const bookData = await fetchBookContents(book.book_id);
-                  if (bookData) {
-                    setContent(bookData.full_text);
-                    setMetadata(bookData.metadata);
-                    setBookId(book.book_id.toString());
+          <div key={book.book_id} className={styles.card.container}>
+            <h3 className={styles.card.title}>{book.title}</h3>
+            <p className={styles.card.author}>{book.author}</p>
+            <p className={styles.card.meta}>Book ID: {book.book_id}</p>
+            <p className={styles.card.meta}>Added: {new Date(book.accessed_at).toLocaleDateString()}</p>
+            <div className={styles.card.button}>
+              <button 
+                onClick={async () => {
+                  try {
+                    const bookData = await fetchBookContents(book.book_id);
+                    if (bookData) {
+                      setContent(bookData.full_text);
+                      setMetadata(bookData.metadata);
+                      setBookId(book.book_id.toString());
+                    }
+                    const parsedMetadata = parseAllMetadata(bookData.metadata);
+                    setParsedMetadata(parsedMetadata);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  } catch (error) {
+                    console.error("Error loading book:", error);
                   }
-                  const parsedMetadata = parseAllMetadata(bookData.metadata);
-                  setParsedMetadata(parsedMetadata);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                } catch (error) {
-                  console.error("Error loading book:", error);
-                }
-              }}
-              className={button.primary}
-            >
-              Load This Book
-            </button>
+                }}
+                className={styles.button.primary}
+              >
+                Load This Book
+              </button>
+            </div>
           </div>
         ))}
       </div>
