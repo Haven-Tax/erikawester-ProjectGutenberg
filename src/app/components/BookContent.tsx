@@ -45,7 +45,7 @@ export default function BookContent({
               Would you like to use AI to provide a Text Analysis of this book?
             </h4>
             <h5 className="text-gray-600 mb-2 text-sm">
-              For when you don't feel like reading the full book 🤷‍♀
+              For when you don&apos;t feel like reading the full book 🤷‍♀
             </h5>
             <div className="mt-8">
               {isLoading ? (
