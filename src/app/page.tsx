@@ -19,7 +19,7 @@ export default function BooksPage() {
   const { layout, text, button, input } = styles;
   const [bookId, setBookId] = useState("");
   const [content, setContent] = useState("");
-  const [metadata, setMetadata] = useState("");
+  // const [metadata, setMetadata] = useState("");
   const [summary, setSummary] = useState("");
   const [error, setError] = useState("");
   const [parsedMetadata, setParsedMetadata] = useState<BookMetadata>({
@@ -31,6 +31,10 @@ export default function BooksPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [analysisComplete, setAnalysisComplete] = useState(false);
+  const setMetadata = (metadata: string) => {
+    const parsedData = parseAllMetadata(metadata);
+    setParsedMetadata(parsedData);
+  };
 
   const fetchBook = async () => {
     setError("");
@@ -124,7 +128,6 @@ export default function BooksPage() {
           setContent={setContent}
           setMetadata={setMetadata}
           setParsedMetadata={setParsedMetadata}
-          setBookId={setBookId}
         />
       </div>
     </div>
