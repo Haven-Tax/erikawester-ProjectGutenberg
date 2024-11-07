@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import ExploredBooks from "./components/ExploredBooks";
+import BookContent from "./components/BookContent";
 import { parseAllMetadata } from "./utils/metadataParser";
 import { storeBookData } from "./services/bookService";
-import BookMetadata from "./components/BookMetadata";
 import { styles } from "./styles/styles";
 
 interface BookMetadata {
@@ -16,12 +16,11 @@ interface BookMetadata {
 }
 
 export default function BooksPage() {
-  const { layout, text, button, input, contentStyle } = styles;
+  const { layout, text, button, input } = styles;
   const [bookId, setBookId] = useState("");
   const [content, setContent] = useState("");
   const [metadata, setMetadata] = useState("");
   const [summary, setSummary] = useState("");
-
   const [parsedMetadata, setParsedMetadata] = useState<BookMetadata>({
     title: "",
     author: "",
@@ -29,6 +28,8 @@ export default function BooksPage() {
     notes: "",
     credits: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [analysisComplete, setAnalysisComplete] = useState(false);
 
   const fetchBook = async () => {
     try {
@@ -53,22 +54,32 @@ export default function BooksPage() {
   };
 
   const summarizeBook = async () => {
-    const response = await fetch(`/api/summarize`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content }),
-    });
-    const result = await response.json();
-    setSummary(result.fullSummary);
+    setIsLoading(true);
+    setAnalysisComplete(false);
+    try {
+      const response = await fetch(`/api/summarize`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content }),
+      });
+      const result = await response.json();
+      setSummary(result.fullSummary);
+      setAnalysisComplete(true);
+    } catch (error) {
+      console.error("Error summarizing book:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className={layout.page}>
-      <div className={layout.wrapper}>
-        <h1 className={text.h1}>Project Gutenberg Books</h1>
+      <div
+        className={`${layout.wrapper} flex flex-col items-center justify-center min-h-[70vh]`}
+      >
+        <div className="text-center w-full max-w-3xl">
+          <h1 className={text.h1}>Project Gutenberg Books</h1>
 
-        {/* Input and Buttons Section */}
-        <div className={styles.layout.wrapper}>
           <div className={styles.input.container}>
             <input
               type="text"
@@ -83,40 +94,19 @@ export default function BooksPage() {
           </div>
         </div>
 
-        {/* Book Metadata Section */}
         {content && (
-          <div className={styles.layout.section}>
-            <BookMetadata metadata={parsedMetadata} />
-
-            {/* Book Content Section */}
-            <div className={layout.wrapper}>
-              <h2 className={text.h2}>Book Content</h2>
-              <div className="mb-4">
-                <p className="text-gray-600 mb-2">
-                  Would you like to use AI to summarize this book?
-                </p>
-                <button onClick={summarizeBook} className={button.secondary}>
-                  Summarize
-                </button>
-              </div>
-              <div className={contentStyle.scroll}>
-                <pre className={text.pre}>{content}</pre>
-              </div>
-            </div>
-
-            {/* Summary Section */}
-            {summary && (
-              <div className={layout.wrapper}>
-                <h2 className={text.h2}>Summary</h2>
-                <div className={contentStyle.scroll}>
-                  <pre className={text.pre}>{summary}</pre>
-                </div>
-              </div>
-            )}
-          </div>
+          <BookContent
+            content={content}
+            summary={summary}
+            parsedMetadata={parsedMetadata}
+            isLoading={isLoading}
+            analysisComplete={analysisComplete}
+            onSummarize={summarizeBook}
+          />
         )}
+      </div>
 
-        {/* Explored Books Section */}
+      <div className={`${layout.wrapper} mt-16`}>
         <ExploredBooks
           setContent={setContent}
           setMetadata={setMetadata}
