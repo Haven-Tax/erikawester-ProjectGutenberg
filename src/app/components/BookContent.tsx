@@ -1,6 +1,6 @@
-import React from 'react';
-import { styles } from '../styles/styles';
-import BookMetadata from './BookMetadata';
+import React from "react";
+import { styles } from "../styles/styles";
+import BookMetadata from "./BookMetadata";
 
 interface BookContentProps {
   content: string;
@@ -38,39 +38,41 @@ export default function BookContent({
           <div className={contentStyle.scroll}>
             <pre className={text.pre}>{content}</pre>
           </div>
-        </div>
 
-        <div className="mb-4">
-          <p className="text-gray-600 mb-2">
-            Would you like to use AI to provide a Text Analysis of this book?
-          </p>
-          <p className="text-gray-600 mb-2">
-            We get it, sometimes we don't feel like reading the full book either 😉
-          </p>
-          {isLoading ? (
-            <p className="text-gray-600 mb-2 animate-pulse">
-              Fetching analysis... please hold!
-            </p>
-          ) : (
-            <button onClick={onSummarize} className={button.secondary}>
-              Text Analysis
-            </button>
-          )}
-          {analysisComplete && !isLoading && (
-            <p className="text-green-600 mt-4">
-              A Summary and the Main Characters have been determined!
-            </p>
-          )}
-        </div>
-
-        {summary && (
-          <div className={layout.wrapper}>
-            <h2 className={text.h2}>Summary</h2>
-            <div className={contentStyle.scroll}>
-              <pre className={text.pre}>{summary}</pre>
-            </div>
+          <div className="mt-12 mb-4">
+            <h3 className={text.h3}>AI Text Analysis</h3>
+            <h4>
+              Would you like to use AI to provide a Text Analysis of this book?
+            </h4>
+            <h5 className="text-gray-600 mb-2 text-sm">
+              Save some time before you dive in. We get it, sometimes we don't
+              feel like reading the full book either 🤷‍♀
+            </h5>
+            {isLoading ? (
+              <p className="text-gray-600 mb-2 animate-pulse">
+                Fetching analysis... please hold!
+              </p>
+            ) : (
+              <button onClick={onSummarize} className={button.secondary}>
+                Generate Analysis
+              </button>
+            )}
+            {analysisComplete && !isLoading && (
+              <p className="text-green-600 mt-4">
+                A Summary and the Main Characters have been determined!
+              </p>
+            )}
           </div>
-        )}
+
+          {summary && (
+            <>
+              <h2 className={text.h2}>Summary</h2>
+              <div className={contentStyle.scroll}>
+                <pre className={text.pre}>{summary}</pre>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

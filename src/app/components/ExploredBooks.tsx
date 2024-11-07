@@ -75,7 +75,9 @@ export default function ExploredBooks({
         Previously Explored Books ({books.length} books)
       </h2>
       <h3 className={text.h3}>
-        Check out books that users have previously explored on our site!
+        Check out books that users have previously explored on our site! The
+        more books you search, the more books will be added here! Let's get
+        reading... 👀
       </h3>
       <div className={styles.layout.grid}>
         {books.map((book) => (
@@ -83,9 +85,11 @@ export default function ExploredBooks({
             <h3 className={styles.card.title}>{book.title}</h3>
             <p className={styles.card.author}>{book.author}</p>
             <p className={styles.card.meta}>Book ID: {book.book_id}</p>
-            <p className={styles.card.meta}>Added: {new Date(book.accessed_at).toLocaleDateString()}</p>
+            <p className={styles.card.meta}>
+              Added: {new Date(book.accessed_at).toLocaleDateString()}
+            </p>
             <div className={styles.card.button}>
-              <button 
+              <button
                 onClick={async () => {
                   try {
                     const bookData = await fetchBookContents(book.book_id);

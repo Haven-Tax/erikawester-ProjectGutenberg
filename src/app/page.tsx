@@ -106,7 +106,7 @@ export default function BooksPage() {
         )}
       </div>
 
-      <div className={`${layout.wrapper} mt-16`}>
+      <div className={layout.wrapper}>
         <ExploredBooks
           setContent={setContent}
           setMetadata={setMetadata}
